@@ -1,15 +1,31 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
-import refs from './refs.js';
 import { galleryItems } from './gallery-items';
-import { createGalleryMarkup, getLightboxMurkup } from './functions.js';
 
-const galleryMarkup = createGalleryMarkup(galleryItems, getLightboxMurkup);
+// window.global = window;
 
-refs.galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
+const refs = {
+  listGallery: document.querySelector('.gallery'),
+};
 
-new SimpleLightbox('.gallery a', {
+function createMarkup(arr) {
+  return arr
+    .map(
+      ({ preview, original, description }) => `
+      <li class="gallery__item">
+        <a class="gallery__link" href="${original}">
+            <img class="gallery__image" src="${preview}" alt="${description}"/>
+        </a>
+        </li>`
+    )
+    .join('');
+}
+
+refs.listGallery.innerHTML = createMarkup(galleryItems);
+
+let gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
+
+console.log(gallery);
